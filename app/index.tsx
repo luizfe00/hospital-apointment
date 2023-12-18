@@ -28,19 +28,21 @@ const Login = () => {
       <View style={styles.backgroundContainer}>
         <icons.Medics width={Dimensions.get("screen").width * 0.7} />
         <View style={styles.contentContainer}>
-          <Text style={styles.header}>Welcome to DocTime</Text>
-          <Text style={styles.header}>Your Health, Your Way!</Text>
-          <Text style={styles.subheader}>
-            Your health is top priority! Experience the convenience of managing
-            your doctor appointments anytime, anywhere
-          </Text>
+          <View style={styles.contentWrapper}>
+            <Text style={styles.header}>Welcome to DocTime</Text>
+            <Text style={styles.header}>Your Health, Your Way!</Text>
+            <Text style={styles.subheader}>
+              Your health is top priority! Experience the convenience of
+              managing your doctor appointments anytime, anywhere
+            </Text>
 
-          <View style={styles.btnContainers}>
-            <View>
-              <Button label="Sign In" onPress={() => router.push("/Login")} />
-              <TouchableOpacity style={styles.secondaryBtn}>
-                <Text style={styles.secondaryBtnText}>Sign Up</Text>
-              </TouchableOpacity>
+            <View style={styles.btnContainers}>
+              <View>
+                <Button label="Sign In" onPress={() => router.push("/Login")} />
+                <TouchableOpacity style={styles.secondaryBtn}>
+                  <Text style={styles.secondaryBtnText}>Sign Up</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
@@ -58,10 +60,13 @@ export const styles = StyleSheet.create({
     marginTop: -(Dimensions.get("screen").height * 0.15),
   },
   contentContainer: {
-    padding: 25,
     marginTop: -(Dimensions.get("screen").height * 0.3),
     backgroundColor: colors.lightBackground,
-    borderRadius: 8,
+    width: Dimensions.get("screen").width,
+    flex: 1,
+  },
+  contentWrapper: {
+    padding: 25,
     flex: 1,
   },
   header: {
@@ -80,17 +85,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     marginTop: -25,
-  },
-  primaryBtn: {
-    backgroundColor: colors.primary,
-    alignItems: "center",
-    padding: 12,
-    borderRadius: 8,
-  },
-  primaryBtnText: {
-    color: "white",
-    fontSize: 20,
-    fontWeight: "600",
   },
   secondaryBtn: {
     padding: 12,
