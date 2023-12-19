@@ -11,44 +11,86 @@ import icons from "../constants/icons";
 import { Stack, useRouter } from "expo-router";
 import colors from "../constants/colors";
 import Button from "../components/Buttons/Button";
+import { ClerkProvider, SignedIn, SignedOut, useAuth } from "@clerk/clerk-expo";
+import { CLERK_PUBLISHABLE_KEY } from "@env";
+import SignInWithOAuth from "../components/SignIn/SignInWithOAuth";
+
+const clerkPublishableKey = CLERK_PUBLISHABLE_KEY;
+
+const SignOut = () => {
+  const { isLoaded, signOut } = useAuth();
+  if (!isLoaded) {
+    return null;
+  }
+  return (
+    <View>
+      <Button
+        label="Sign Out"
+        onPress={() => {
+          signOut();
+        }}
+      />
+    </View>
+  );
+};
 
 const Login = () => {
   const router = useRouter();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f9fa" }}>
-      <Stack.Screen
-        options={{
-          headerStyle: { backgroundColor: "#f8f9fa" },
-          headerShadowVisible: false,
-          headerTitle: "",
+    <ClerkProvider publishableKey={clerkPublishableKey}>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#f8f9fa",
         }}
-      />
-
-      <View style={styles.backgroundContainer}>
-        <icons.Medics width={Dimensions.get("screen").width * 0.7} />
-        <View style={styles.contentContainer}>
-          <View style={styles.contentWrapper}>
-            <Text style={styles.header}>Welcome to DocTime</Text>
-            <Text style={styles.header}>Your Health, Your Way!</Text>
-            <Text style={styles.subheader}>
-              Your health is top priority! Experience the convenience of
-              managing your doctor appointments anytime, anywhere
-            </Text>
-
-            <View style={styles.btnContainers}>
-              <View>
-                <Button label="Sign In" onPress={() => router.push("/Login")} />
-                <TouchableOpacity style={styles.secondaryBtn}>
-                  <Text style={styles.secondaryBtnText}>Sign Up</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
-      </View>
-    </SafeAreaView>
+      >
+        <SignedIn>
+          <SignOut />
+        </SignedIn>
+        <SignedOut>
+          <SignInWithOAuth />
+        </SignedOut>
+      </SafeAreaView>
+    </ClerkProvider>
   );
+
+  // return (
+  //   <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f9fa" }}>
+  //     <Stack.Screen
+  //       options={{
+  //         headerStyle: { backgroundColor: "#f8f9fa" },
+  //         headerShadowVisible: false,
+  //         headerTitle: "",
+  //       }}
+  //     />
+
+  //     <View style={styles.backgroundContainer}>
+  //       <icons.Medics width={Dimensions.get("screen").width * 0.7} />
+  //       <View style={styles.contentContainer}>
+  //         <View style={styles.contentWrapper}>
+  //           <Text style={styles.header}>Welcome to DocTime</Text>
+  //           <Text style={styles.header}>Your Health, Your Way!</Text>
+  //           <Text style={styles.subheader}>
+  //             Your health is top priority! Experience the convenience of
+  //             managing your doctor appointments anytime, anywhere
+  //           </Text>
+
+  //           <View style={styles.btnContainers}>
+  //             <View>
+  //               <Button label="Sign In" onPress={() => router.push("/Login")} />
+  //               <TouchableOpacity style={styles.secondaryBtn}>
+  //                 <Text style={styles.secondaryBtnText}>Sign Up</Text>
+  //               </TouchableOpacity>
+  //             </View>
+  //           </View>
+  //         </View>
+  //       </View>
+  //     </View>
+  //   </SafeAreaView>
+  // );
 };
 
 export const styles = StyleSheet.create({
