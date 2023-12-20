@@ -1,8 +1,8 @@
 import React from "react";
 import * as WebBrowser from "expo-web-browser";
-import { Button } from "react-native";
 import { useOAuth } from "@clerk/clerk-expo";
 import { useWarmUpBrowser } from "../../hooks/warmUpBrowser";
+import Button from "../Buttons/Button";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -28,6 +28,12 @@ const SignInWithOAuth = () => {
     }
   }, []);
 
-  return <Button title="Sign in with Google" onPress={onPress} />;
+  return (
+    <Button
+      styleType="secondary"
+      label="Sign in with Google"
+      onPress={onPress}
+    />
+  );
 };
 export default SignInWithOAuth;
