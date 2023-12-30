@@ -40,28 +40,19 @@ const Login = () => {
 
   return (
     <ClerkProvider publishableKey={clerkPublishableKey}>
-      <SafeAreaView
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#f8f9fa",
+      <Stack.Screen
+        options={{
+          headerStyle: { backgroundColor: colors.background },
+          headerShadowVisible: false,
+          headerTitle: "",
         }}
-      >
-        <Stack.Screen
-          options={{
-            headerStyle: { backgroundColor: "#f8f9fa" },
-            headerShadowVisible: false,
-            headerTitle: "",
-          }}
-        />
-        <SignedIn>
-          <SignOut />
-        </SignedIn>
-        <SignedOut>
-          <SignInContent />
-        </SignedOut>
-      </SafeAreaView>
+      />
+      <SignedIn>
+        <SignOut />
+      </SignedIn>
+      <SignedOut>
+        <SignInContent />
+      </SignedOut>
     </ClerkProvider>
   );
 };

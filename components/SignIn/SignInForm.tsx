@@ -14,11 +14,14 @@ const SignInForm = ({ goBack }: SignInFormProps) => {
 
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const onSignInPress = async () => {
     if (!isLoaded) {
       return;
     }
+
+    setIsLoading(true);
 
     try {
       const completeSignIn = await signIn.create({
@@ -28,8 +31,11 @@ const SignInForm = ({ goBack }: SignInFormProps) => {
       // This is an important step,
       // This indicates the user is signed in
       await setActive({ session: completeSignIn.createdSessionId });
+      setIsLoading(false);
     } catch (err: any) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -39,23 +45,26 @@ const SignInForm = ({ goBack }: SignInFormProps) => {
         <View style={styles.inputWrapper}>
           <CustomTextInput
             label="Email"
-            error
             styleType="outlined"
             autoCapitalize="none"
             value={emailAddress}
-            placeholder="E-mail..."
             onChangeText={(emailAddress) => setEmailAddress(emailAddress)}
           />
           <CustomTextInput
             label="Password"
+            styleType="outlined"
             value={password}
-            placeholder="Password..."
             secureTextEntry={true}
             onChangeText={(password) => setPassword(password)}
           />
         </View>
         <View style={styles.btnWrapper}>
-          <Button label="Sign In" onPress={onSignInPress} />
+          <Button
+            label="Sign In"
+            onPress={onSignInPress}
+            disabled={isLoading}
+            loading={isLoading}
+          />
           <Button styleType="ghost" label="Go back" onPress={goBack} />
         </View>
       </View>

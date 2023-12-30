@@ -1,6 +1,13 @@
-import { StyleSheet, Text, TextStyle, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  TouchableOpacityProps,
+} from "react-native";
 import React from "react";
 import colors from "../../constants/colors";
+import { ActivityIndicator } from "react-native";
 
 type ButtonStyleType = "primary" | "secondary" | "ghost";
 
@@ -8,35 +15,64 @@ export interface ButtonStyleProps extends TextStyle {
   backgroundColor?: string;
 }
 
-export interface ButtonProps {
+export interface ButtonProps extends TouchableOpacityProps {
   label: string;
   onPress?: () => void;
   styles?: ButtonStyleProps;
   styleType?: ButtonStyleType;
+  loading?: boolean;
 }
 
-const Button = ({
+const CustomButton = ({
   label,
   onPress,
   styles: btnStyles,
   styleType = "primary",
+  loading,
+  ...props
 }: ButtonProps) => {
+  const stylesResult = styles(styleType, btnStyles ?? {}, props.disabled);
+
   return (
     <TouchableOpacity
+      {...props}
       onPress={onPress}
-      style={styles(styleType, btnStyles ?? {}).btnContainer}
+      style={stylesResult.btnContainer}
     >
-      <Text style={styles(styleType, btnStyles ?? {}).btnText}>{label}</Text>
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <Text style={stylesResult.btnText}>{label}</Text>
+      )}
     </TouchableOpacity>
   );
 };
 
-export default Button;
+export default CustomButton;
 
 const styles = (
   styleType: ButtonStyleType,
-  { backgroundColor, color, fontSize, fontWeight }: ButtonStyleProps
+  { backgroundColor, color, fontSize, fontWeight }: ButtonStyleProps,
+  disabled?: boolean
 ) => {
+  if (disabled)
+    return StyleSheet.create({
+      btnContainer: {
+        backgroundColor: colors.disabled,
+        alignItems: "center",
+        padding: 12,
+        borderRadius: 50,
+        opacity: 0.65,
+        pointerEvents: "none",
+      },
+      btnText: {
+        opacity: 0.8,
+        color: "#fff",
+        fontSize: fontSize ?? 20,
+        fontWeight: fontWeight ?? "600",
+      },
+    });
+
   switch (styleType) {
     case "primary":
       return StyleSheet.create({
@@ -73,6 +109,8 @@ const styles = (
           alignItems: "center",
           padding: 12,
           borderRadius: 50,
+          borderColor: colors.border,
+          borderWidth: 1,
         },
         btnText: {
           color: color ?? colors.muted,

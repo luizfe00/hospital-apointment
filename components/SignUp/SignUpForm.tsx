@@ -1,16 +1,28 @@
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
 import React from "react";
 import { useSignUp } from "@clerk/clerk-expo";
-import Button from "../Buttons/Button";
-import SignInWithOAuth from "../SignIn/SignInWithOAuth";
+import colors from "../../constants/colors";
+import CustomTextInput from "../Input/TextInput";
+import CustomButton from "../Buttons/Button";
 
-const SignUpForm = () => {
+interface SignUpFormProps {
+  goBack?: () => void;
+}
+
+const SignUpForm = ({ goBack }: SignUpFormProps) => {
   const { isLoaded, signUp, setActive } = useSignUp();
 
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = React.useState("");
   const [pendingVerification, setPendingVerification] = React.useState(false);
   const [code, setCode] = React.useState("");
 
@@ -54,54 +66,61 @@ const SignUpForm = () => {
   };
 
   return (
-    <View>
-      {!pendingVerification && (
-        <View>
-          <View>
-            <TextInput
+    <>
+      {!pendingVerification ? (
+        <View style={styles.container}>
+          <View style={styles.wrapper}>
+            <CustomTextInput
+              label="First Name"
               autoCapitalize="none"
               value={firstName}
-              placeholder="First Name..."
               onChangeText={(firstName) => setFirstName(firstName)}
             />
-          </View>
-          <View>
-            <TextInput
+            <CustomTextInput
+              label="Last Name"
               autoCapitalize="none"
               value={lastName}
-              placeholder="Last Name..."
               onChangeText={(lastName) => setLastName(lastName)}
             />
-          </View>
-          <View>
-            <TextInput
+            <CustomTextInput
+              label="Email"
               autoCapitalize="none"
               value={emailAddress}
-              placeholder="Email..."
               onChangeText={(email) => setEmailAddress(email)}
             />
-          </View>
 
-          <View>
-            <TextInput
+            <CustomTextInput
+              label="Password"
               value={password}
-              placeholder="Password..."
-              placeholderTextColor="#000"
               secureTextEntry={true}
               onChangeText={(password) => setPassword(password)}
             />
-          </View>
 
-          <Button label="Sign up" onPress={onSignUpPress} />
-          <SignInWithOAuth />
+            <CustomTextInput
+              label="Password confirmation"
+              value={passwordConfirmation}
+              secureTextEntry={true}
+              onChangeText={(password) => setPasswordConfirmation(password)}
+            />
+            <View style={styles.btnWrapper}>
+              <CustomButton
+                disabled={!password.length || password !== passwordConfirmation}
+                label="Sign up"
+                onPress={onSignUpPress}
+              />
+              <CustomButton
+                styleType="ghost"
+                label="Go back"
+                onPress={goBack}
+              />
+            </View>
+          </View>
         </View>
-      )}
-      {pendingVerification && (
+      ) : (
         <View>
           <View>
-            <TextInput
+            <CustomTextInput
               value={code}
-              placeholder="Code..."
               onChangeText={(code) => setCode(code)}
             />
           </View>
@@ -110,8 +129,35 @@ const SignUpForm = () => {
           </TouchableOpacity>
         </View>
       )}
-    </View>
+    </>
   );
 };
 
 export default SignUpForm;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  inputWrapper: {
+    gap: 20,
+    flex: 1,
+  },
+  wrapper: {
+    padding: 25,
+    backgroundColor: colors.lightBackground,
+    justifyContent: "space-between",
+    width: Dimensions.get("screen").width * 0.8,
+    borderRadius: 12,
+    shadowColor: "rgba(0, 0, 0, .12)",
+    shadowOffset: { height: 2, width: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    gap: 40,
+  },
+  btnWrapper: {
+    gap: 10,
+  },
+});

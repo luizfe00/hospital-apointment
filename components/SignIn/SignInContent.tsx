@@ -1,18 +1,11 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
-import React, { ReactNode } from "react";
-import { router } from "expo-router";
+import { View, Text, StyleSheet, Dimensions } from "react-native";
+import React from "react";
 import colors from "../../constants/colors";
 import icons from "../../constants/icons";
-import Button from "../Buttons/Button";
 import SignInForm from "./SignInForm";
 import SignUpForm from "../SignUp/SignUpForm";
 import SignInWithOAuth from "./SignInWithOAuth";
+import CustomButton from "../Buttons/Button";
 
 type SignInScreenContentOptions = "default" | "signIn" | "signUp";
 
@@ -34,12 +27,12 @@ const SignInContent = () => {
             </Text>
 
             <View style={styles.btnContainers}>
-              <Button
+              <CustomButton
                 label="Sign In"
                 onPress={() => setCurrContent("signIn")}
               />
               <SignInWithOAuth />
-              <Button
+              <CustomButton
                 label="Sign Up"
                 styleType="ghost"
                 onPress={() => setCurrContent("signUp")}
@@ -50,7 +43,7 @@ const SignInContent = () => {
       </>
     ),
     signIn: <SignInForm goBack={() => setCurrContent("default")} />,
-    signUp: <SignUpForm />,
+    signUp: <SignUpForm goBack={() => setCurrContent("default")} />,
   };
 
   return <View style={styles.backgroundContainer}>{content[currContent]}</View>;
