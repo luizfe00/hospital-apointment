@@ -16,7 +16,9 @@ const SignInContent = () => {
   const content: Record<SignInScreenContentOptions, React.ReactNode> = {
     default: (
       <>
-        <icons.Medics width={Dimensions.get("screen").width * 0.7} />
+        <View style={styles.imageBackground}>
+          <icons.Medics width={Dimensions.get("screen").width * 0.9} />
+        </View>
         <View style={styles.contentContainer}>
           <View style={styles.contentWrapper}>
             <Text style={styles.header}>Welcome to DocTime</Text>
@@ -56,14 +58,19 @@ export const styles = StyleSheet.create({
     width: Dimensions.get("screen").width,
     backgroundColor: colors.background,
     flex: 1,
-    alignItems: "center",
-    marginTop: -(Dimensions.get("screen").height * 0.15),
+    justifyContent: "flex-end",
+  },
+  imageBackground: {
+    position: "absolute",
+    top: "-20%",
+    right: "5%",
   },
   contentContainer: {
-    marginTop: -(Dimensions.get("screen").height * 0.3),
+    marginBottom: 0,
     backgroundColor: colors.lightBackground,
     width: Dimensions.get("screen").width,
-    flex: 1,
+    justifyContent: "flex-end",
+    height: Dimensions.get("screen").height * 0.6,
   },
   contentWrapper: {
     padding: 25,
